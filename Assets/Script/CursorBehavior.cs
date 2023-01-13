@@ -25,12 +25,12 @@ public class CursorBehavior : MonoBehaviour
     [SerializeField] float progressBarDecay;
     
     float catchProgress;
-    public void FixedUpdate()
+    private void FixedUpdate()
     {
         MoveHook();
         CheckProgress();
     }
-    public void MoveHook()
+    private void MoveHook()
     {
         if (Input.GetMouseButton(0)) //moves the hook bar
         {
@@ -49,7 +49,7 @@ public class CursorBehavior : MonoBehaviour
         hook.position = Vector3.Lerp(bottomBorder.position, topBorder.position, hookPosition);
     }
 
-    public void CheckProgress() //for the progressbar
+    private void CheckProgress() //for the progressbar
     {
         Vector3 progressBarScale = progressBarContainer.localScale;
         progressBarScale.y = catchProgress;
