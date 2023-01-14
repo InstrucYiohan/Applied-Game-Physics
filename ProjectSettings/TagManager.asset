@@ -3,7 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Target
+  - DeathCollider
+  - FinishLine
+  - Food
+  - Ground
+  - Cherry
+  - Cheese
+  - Fish
+  - Obstacle
+  - Coin
   layers:
   - Default
   - TransparentFX
