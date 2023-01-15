@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 295f0673bd303c3409d7ec420cbaa87d
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Bantayog
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: b1cc9ce16039e0049ab89e17532fb3e3, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

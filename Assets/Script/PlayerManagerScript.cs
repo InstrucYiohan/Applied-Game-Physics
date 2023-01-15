@@ -19,20 +19,12 @@ public class PlayerManagerScript : MonoBehaviour
     [SerializeField] private float forwardSpeed;
     [SerializeField] private float horizontalSpeed;
 
-    [Header("Coins")]
-    [SerializeField] int currCoins;
-    [SerializeField] int dropCoins = 1;
-    [SerializeField] TMP_Text coinText;
+    [Header("Hunger Bar")]
+    [SerializeField] public int playerHunger = 6;
+    [SerializeField] public int currHunger;
+    private int minusHunger = 1;
+    private int catFood = 1;
 
-    [Header("Health Bar")]
-    [SerializeField] public int playerHealth = 6;
-    private int minusHeatlh = 1;
-    [SerializeField] public int currHealth;
-
-    [Header("Food")]
-    private int cherry = 1;
-    private int cheese = 1;
-    private int fish = 2;
 
     [Header("Time")]
     private float timeRemaining = 3.0f;
@@ -47,26 +39,30 @@ public class PlayerManagerScript : MonoBehaviour
         catRB = GetComponent<Rigidbody>();
         catAnim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        currCoins = 0;
-        currHealth = playerHealth;    
+        currHunger = playerHunger;    
     }
 
     void Update()
     {
-        jumpPlayer();
-        healthBarBehaviour();
-        showCoinsUI();
-
-        if(currHealth > playerHealth)
+        if(MenuManager.MenuManagerInstance.GameState)
         {
-            currHealth = playerHealth;
+            jumpPlayer();
+            hungerBarBehaviour();
+
+            if(currHunger > playerHunger)
+            {
+                currHunger = playerHunger;
+            }
         }
     }
 
     void FixedUpdate()
     {
-        playerMovement();
-        betterJump();
+        if(MenuManager.MenuManagerInstance.GameState)
+        {
+            playerMovement();
+            betterJump();
+        }
     }
 
 
@@ -107,25 +103,20 @@ public class PlayerManagerScript : MonoBehaviour
         }
     }
 
-    void healthBarBehaviour()
+    void hungerBarBehaviour()
     {
   
         timeRemaining -= Time.deltaTime;
         if (timeRemaining <= 0)
         {
-            currHealth -= minusHeatlh;
-            timeRemaining = 5;
+            currHunger -= minusHunger;
+            timeRemaining = 2.0f;
         }
         
 
-        Debug.Log("Time: " + timeRemaining + "Health: " + currHealth);
+        Debug.Log("Time: " + timeRemaining + "Health: " + currHunger);
     }
     
-    void showCoinsUI()
-    {
-        coinText.text = "Coins: " + currCoins.ToString();
-    }
-
 
     private void OnCollisionEnter(Collision other) 
     {
@@ -139,29 +130,21 @@ public class PlayerManagerScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) 
     {
+        //Finish Line Trigger
         if(other.tag == "FinishLine")
         {
             //newPos = new Vector3(0,0,0);
             //catSpeed = 0.0f;
         }
-        //Coins
-        if(other.tag =="Coin")
+
+        //Hunger Trigger
+        if((other.gameObject.tag == "Food") && currHunger < playerHunger)
+        {
+            currHunger += catFood;
+        }
+        if((other.gameObject.tag == "Food"))
         {
             Destroy(other.gameObject);
-            currCoins += dropCoins;
-        }
-        //Food
-        if(other.tag == "Cherry")
-        {
-            currHealth -= cherry;
-        }
-        else if(other.tag == "Cheese" && currHealth < playerHealth)
-        {
-            currHealth += cheese;
-        }
-        else if(other.tag == "Fish" && currHealth < playerHealth )
-        {
-            currHealth += fish;
         }
     }
 

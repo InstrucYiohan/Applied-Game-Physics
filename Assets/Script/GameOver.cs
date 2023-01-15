@@ -16,7 +16,7 @@ namespace PathCreation.Examples
 
         private void Update() 
         {
-            if(playerManager.currHealth == 0)
+            if(playerManager.currHunger == 0)
             {
                 endingText.SetText("Game Over!");
                 Invoke("gameOver", 5.0f);
