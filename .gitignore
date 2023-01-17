@@ -58,3 +58,5 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+Assets/Script/HealthUIScript.cs
+Assets/Script/HealthUIScript.cs.meta
