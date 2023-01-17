@@ -9,11 +9,9 @@ TagManager:
   - FinishLine
   - Food
   - Ground
-  - Cherry
-  - Cheese
-  - Fish
   - Obstacle
   - Coin
+  - destroy
   layers:
   - Default
   - TransparentFX

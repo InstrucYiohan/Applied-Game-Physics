@@ -10,29 +10,21 @@ public class PlayerManagerScript : MonoBehaviour
     [Header("Jump")]
     Rigidbody catRB;
     [SerializeField] bool isGrounded = true;
-    [SerializeField] float jumpForce = 2.0f;
-    private Vector3 jump;
+    [SerializeField] private float jumpForce = 2.0f;
+    [SerializeField] private float holdFallMultiplier;
+    [SerializeField] private float fallMultiplier;
 
     [Header("Movement & Position")]
-    [SerializeField] Transform catPos;
-    [SerializeField] Transform forwadPos;
-    [SerializeField] float catSpeed = 5.0f;
-    private Vector3 newPos ;
+    //Set the value in the editor!!!!
+    [SerializeField] private float forwardSpeed;
+    [SerializeField] private float horizontalSpeed;
 
-    [Header("Coins")]
-    [SerializeField] int currCoins;
-    [SerializeField] int dropCoins = 1;
-    [SerializeField] TMP_Text coinText;
+    [Header("Hunger Bar")]
+    [SerializeField] public int playerHunger = 6;
+    [SerializeField] public int currHunger;
+    private int minusHunger = 1;
+    private int catFood = 1;
 
-    [Header("Health Bar")]
-    [SerializeField] public int playerHealth = 6;
-    private int minusHeatlh = 1;
-    [SerializeField] public int currHealth;
-
-    [Header("Food")]
-    private int cherry = 1;
-    private int cheese = 1;
-    private int fish = 2;
 
     [Header("Time")]
     private float timeRemaining = 3.0f;
@@ -40,65 +32,49 @@ public class PlayerManagerScript : MonoBehaviour
     [Header("Animation")]
     [SerializeField] Animator catAnim;
 
-    [SerializeField] PlayerMoveForward playerMoveForward;
     Rigidbody rb;
-    [SerializeField] float forwardSpeed = 3.0f;
 
     void Start() 
     {
         catRB = GetComponent<Rigidbody>();
-        catPos = GetComponent<Transform>();
         catAnim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        currCoins = 0;
-        currHealth = playerHealth;    
-        jump = new Vector3(0.0f, 2.0f, 0.0f);
+        currHunger = playerHunger;    
     }
 
     void Update()
     {
-        forwardPlayer();
-        movePlayer();
-        jumpPlayer();
-        healthBarBehaviour();
-        showCoinsUI();
-
-        if(currHealth > playerHealth)
+        if(MenuManager.MenuManagerInstance.GameState)
         {
-            currHealth = playerHealth;
+            jumpPlayer();
+            hungerBarBehaviour();
+
+            if(currHunger > playerHunger)
+            {
+                currHunger = playerHunger;
+            }
         }
     }
 
     void FixedUpdate()
     {
-        forwardPlayer();
+        if(MenuManager.MenuManagerInstance.GameState)
+        {
+            playerMovement();
+            betterJump();
+        }
     }
 
-    void forwardPlayer()
-    {
-        rb.MovePosition(transform.position + (transform.forward * forwardSpeed * Time.deltaTime));
-    }
 
-    void movePlayer()
+    //This method uses the MovePosition method from the rigidbody class for the player movement
+    //It takes the calculation for the forward and horizontal movement and is stored in a variable of type vector3
+    //It then takes those vector3 value as an argument for the MovePosition method
+    void playerMovement()
     {
-
-        float xPostion = catPos.position.x * catSpeed * Time.deltaTime;
-        if(Input.GetKey(KeyCode.D))
-        {
-            //Move Left
-            newPos = catPos.localPosition;  
-            newPos.x += 1f * Time.deltaTime * catSpeed;
-            newPos.z = forwadPos.localPosition.z;
-            catPos.localPosition = newPos; 
-        }
-        if(Input.GetKey(KeyCode.A))
-        {
-            //Move Right
-            newPos = catPos.localPosition;  
-            newPos.x -= 1f * Time.deltaTime * catSpeed;  
-            newPos.z = forwadPos.localPosition.z; 
-            catPos.localPosition = newPos; 
-        }
+        float XValue = Input.GetAxis("Horizontal");
+        Vector3 forwardMove = transform.forward * forwardSpeed * Time.fixedDeltaTime;
+        Vector3 horizontalMove = transform.right * XValue * forwardSpeed * Time.fixedDeltaTime * horizontalSpeed;
+        rb.MovePosition(rb.position + forwardMove + horizontalMove);
     }
 
     void jumpPlayer()
@@ -106,31 +82,41 @@ public class PlayerManagerScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W) && isGrounded)
         {
             isGrounded = false;
-            catPos.rotation = Quaternion.identity;
-            catRB.AddForce(jump * jumpForce, ForceMode.Impulse);
             catAnim.SetBool("IsJumping", true);
+            //catRB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
         }
     }
 
-    void healthBarBehaviour()
+    void betterJump()
+    {
+        //Slower fall when "W" is hold pressed
+        if (rb.velocity.y < 0)
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (holdFallMultiplier - 1) * Time.deltaTime;
+        }
+
+        //Faster fall when not holding "W"
+        else if (rb.velocity.y > 0 && !Input.GetKey(KeyCode.W))
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
+    }
+
+    void hungerBarBehaviour()
     {
   
         timeRemaining -= Time.deltaTime;
         if (timeRemaining <= 0)
         {
-            currHealth -= minusHeatlh;
-            timeRemaining = 5;
+            currHunger -= minusHunger;
+            timeRemaining = 2.0f;
         }
         
 
-        Debug.Log("Time: " + timeRemaining + "Health: " + currHealth);
+        Debug.Log("Time: " + timeRemaining + "Health: " + currHunger);
     }
     
-    void showCoinsUI()
-    {
-        coinText.text = "Coins: " + currCoins.ToString();
-    }
-
 
     private void OnCollisionEnter(Collision other) 
     {
@@ -144,31 +130,21 @@ public class PlayerManagerScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) 
     {
+        //Finish Line Trigger
         if(other.tag == "FinishLine")
         {
-            forwardSpeed = 0;
             //newPos = new Vector3(0,0,0);
             //catSpeed = 0.0f;
-            playerMoveForward.stopMovement();
         }
-        //Coins
-        if(other.tag =="Coin")
+
+        //Hunger Trigger
+        if((other.gameObject.tag == "Food") && currHunger < playerHunger)
+        {
+            currHunger += catFood;
+        }
+        if((other.gameObject.tag == "Food"))
         {
             Destroy(other.gameObject);
-            currCoins += dropCoins;
-        }
-        //Food
-        if(other.tag == "Cherry")
-        {
-            currHealth -= cherry;
-        }
-        else if(other.tag == "Cheese" && currHealth < playerHealth)
-        {
-            currHealth += cheese;
-        }
-        else if(other.tag == "Fish" && currHealth < playerHealth )
-        {
-            currHealth += fish;
         }
     }
 
