@@ -12,6 +12,7 @@ TagManager:
   - Obstacle
   - Coin
   - destroy
+  - StopSticks
   layers:
   - Default
   - TransparentFX

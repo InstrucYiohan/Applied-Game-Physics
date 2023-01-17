@@ -34,16 +34,32 @@ public class PlayerManagerScript : MonoBehaviour
 
     Rigidbody rb;
 
+    private float slowDownTimer = 3.0f;
+    private bool slowDown;
+
     void Start() 
     {
         catRB = GetComponent<Rigidbody>();
         catAnim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        currHunger = playerHunger;    
+        currHunger = playerHunger;
+        slowDown = false;
     }
 
     void Update()
     {
+        //Timer ticks when slowDown is triggered
+        if (slowDownTimer > 0 && slowDown == true)
+        {
+            slowDownTimer -= Time.deltaTime;
+        }
+        //Reset Slow down timer when it goes to 0, and revert Speed loss
+        if (slowDownTimer <= 0)
+        {
+            forwardSpeed = forwardSpeed * 2;
+            slowDownTimer = 3f;
+            slowDown = false;
+        }
         if(MenuManager.MenuManagerInstance.GameState)
         {
             jumpPlayer();
@@ -146,6 +162,18 @@ public class PlayerManagerScript : MonoBehaviour
         {
             Destroy(other.gameObject);
         }
+
+        if(other.gameObject.tag == "StopSticks")
+        {
+            slowDown = true;
+            forwardSpeed = forwardSpeed / 2;
+            currHunger = currHunger - 1;
+        }
+    }
+
+    private void OnTriggerExit(Collider collision)
+    {
+
     }
 
     public void stopAnimation()
