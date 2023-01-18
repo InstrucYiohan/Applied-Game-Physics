@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1797982289781119629}
   - component: {fileID: 893197970379880567}
+  - component: {fileID: -2734820192963095586}
   m_Layer: 0
   m_Name: Obstacle_Trigger 1
   m_TagString: StopSticks
@@ -41,11 +42,27 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2478325344011021307}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.430037, y: 0.6586462, z: 0.87872076}
-  m_Center: {x: -0.0020168116, y: 0.3787157, z: -0.0388453}
+  m_Size: {x: 1.3596773, y: 0.6546241, z: 0.8104453}
+  m_Center: {x: 0.0063295364, y: 0.35110104, z: -0.004707575}
+--- !u!54 &-2734820192963095586
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2478325344011021307}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &6395167276488154068
 PrefabInstance:
   m_ObjectHideFlags: 0

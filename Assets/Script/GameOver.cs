@@ -11,13 +11,12 @@ namespace PathCreation.Examples
     {
         [SerializeField] PlayerManagerScript playerManager;
         [SerializeField] TMP_Text endingText;
-        [SerializeField] GameObject toast;
-        [SerializeField] GameObject toastHolder;
 
         private void Update() 
         {
             if(playerManager.currHunger == 0)
             {
+                playerManager.gameOver();
                 endingText.SetText("Game Over!");
                 Invoke("gameOver", 5.0f);
             }
@@ -27,11 +26,13 @@ namespace PathCreation.Examples
         {
             if(other.gameObject.tag.Equals("Obstacle"))
             {
+                playerManager.gameOver();
                 endingText.SetText("Game Over!");
                 Invoke("gameOver", 1.0f);
             }
             if(other.gameObject.tag.Equals("DeathCollider"))
             {
+                playerManager.gameOver();
                 endingText.SetText("Game Over!");
                 Invoke("gameOver", 1.0f);
             }
@@ -41,6 +42,7 @@ namespace PathCreation.Examples
         {
             if(other.tag == "FinishLine")
             {
+                playerManager.gameOver();
                 endingText.SetText("You Won!");
                 Invoke("gameOver", 1.0f);
             }

@@ -10,6 +10,7 @@ public class MenuManager : MonoBehaviour
     public GameObject menuElement;
     public GameObject hungerUI;
 
+
     // Start is called before the first frame update
     void Start()
     {

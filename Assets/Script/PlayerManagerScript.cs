@@ -132,6 +132,12 @@ public class PlayerManagerScript : MonoBehaviour
 
         Debug.Log("Time: " + timeRemaining + "Health: " + currHunger);
     }
+
+    public void gameOver()
+    {
+        forwardSpeed = 0f;
+        catAnim.SetBool("AtFinishLine", true);
+    }
     
 
     private void OnCollisionEnter(Collision other) 
@@ -141,6 +147,20 @@ public class PlayerManagerScript : MonoBehaviour
             Debug.Log("Ground");
             isGrounded = true;
             catAnim.SetBool("IsJumping", false);
+        }
+
+        if(other.gameObject.tag == "StopSticks")
+        {
+            slowDown = true;
+            forwardSpeed = forwardSpeed / 2;
+            currHunger = currHunger - 1;
+            Destroy(other.gameObject);
+        }
+
+        if(other.gameObject.tag == "Wall")
+        {
+            slowDown = true;
+            forwardSpeed = forwardSpeed / 2;
         }
     }
 
@@ -157,24 +177,15 @@ public class PlayerManagerScript : MonoBehaviour
         if((other.gameObject.tag == "Food") && currHunger < playerHunger)
         {
             currHunger += catFood;
+            timeRemaining = 2.0f;
         }
         if((other.gameObject.tag == "Food"))
         {
             Destroy(other.gameObject);
         }
 
-        if(other.gameObject.tag == "StopSticks")
-        {
-            slowDown = true;
-            forwardSpeed = forwardSpeed / 2;
-            currHunger = currHunger - 1;
-        }
     }
 
-    private void OnTriggerExit(Collider collision)
-    {
-
-    }
 
     public void stopAnimation()
     {

@@ -4,13 +4,29 @@ using UnityEngine;
 
 public class DestroyObject : MonoBehaviour
 {
-     void OnTriggerEnter(Collider other) 
-     {
-        if (other.gameObject.tag == "destroy")
+  
+    private Rigidbody rb;
+
+    private void Start() 
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+    void FixedUpdate()
+    {
+        if(MenuManager.MenuManagerInstance.GameState)
         {
-            Destroy(other.gameObject);
+            //desMovement();
         }
-         
-     }
+    }
+    void desMovement()
+    {
+        
+    }
+
+    private void OnCollisionEnter(Collision other) 
+    {
+        Destroy(other.gameObject);
+    }
 
 }
