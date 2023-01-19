@@ -9,8 +9,8 @@ public class EnemyAI : MonoBehaviour
     public NavMeshAgent agent;
     public Transform player;
     public LayerMask isGround, isPlayer;
-    public GameObject gameOver;
-    public GameObject jumpScare;
+    //public GameObject gameOver;
+    //public GameObject jumpScare;
 
 
     public Vector3 walkPoint;
@@ -64,23 +64,24 @@ public class EnemyAI : MonoBehaviour
     {
         //AudioManager.Instance.PlayAudio("EnemyDetection");
         agent.SetDestination(player.position);
+        Debug.Log("Chasing");
     }
     private void Attacking()
     {
         agent.SetDestination(transform.position);
-        StartCoroutine(startJumpscare());
+        //StartCoroutine(startJumpscare());
         
         //Time.timeScale = 0f;
-        //Debug.Log("You died");
+        Debug.Log("You died");
     }
 
-    public IEnumerator startJumpscare()
-    {
-        //AudioManager.Instance.PlayAudio("EnemyJumpscare");
-        jumpScare.SetActive(true);
-        yield return new WaitForSeconds(2f);
-        gameOver.SetActive(true);
-    }
+    //public IEnumerator startJumpscare()
+    //{
+    //    //AudioManager.Instance.PlayAudio("EnemyJumpscare");
+    //    jumpScare.SetActive(true);
+    //    yield return new WaitForSeconds(2f);
+    //    gameOver.SetActive(true);
+    //}
 
     private void OnDrawGizmos()
     {
