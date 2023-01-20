@@ -24,7 +24,7 @@ public class CoinBehaviour : MonoBehaviour
 
     private void OnDestroy()
     {
-        AudioManager.Instance.PlayOneshot(Pickup);
+        //AudioManager.Instance.PlayOneshot(Pickup);
         Instantiate(particlePrefab, transform.position, Quaternion.identity);
     }
 }
