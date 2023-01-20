@@ -5,16 +5,15 @@ using PathCreation;
 
 public class FoodSpawner : MonoBehaviour
 {
-    [SerializeField] float spacing;
+    [SerializeField]private  float spacing;
     [SerializeField] GameObject[] foodArray;
-    [SerializeField] bool isGrounded = true;
+    [SerializeField] private bool isGrounded = true;
     [SerializeField] PathCreator  pathCreator;
     [SerializeField] GameObject holder;
-    [SerializeField] bool rotationIgnoreX = true;
+    [SerializeField] private bool rotationIgnoreX = true;
 
     const float minSpacing = .1f;
 
-    // Start is called before the first frame update
 
     void Start()
     {

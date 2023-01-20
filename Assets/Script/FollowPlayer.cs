@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class FollowPlayer : MonoBehaviour
 {
-    //This script keeps the camera the same distance away from the player while following the player
+    //This script keeps the gameObject this script is attached to, the same distance away from the player while following
 
     [SerializeField] private Transform playerPos;
     private Vector3 offset;
@@ -14,7 +14,7 @@ public class CameraFollow : MonoBehaviour
         //Automatically references the transform of "Kahel" when starting the game
         playerPos = GameObject.Find("Kahel").GetComponent<Transform>();
 
-        //calculates the distance of the camera away from the player
+        //calculates the distance away from the player
         offset = transform.position - playerPos.position;
     }
 
@@ -22,8 +22,6 @@ public class CameraFollow : MonoBehaviour
     void Update()
     {
         //Makes the camera stays in the middle when moving horizontally
-        Vector3 targetPos = playerPos.position + offset;
-        targetPos.x = 0;
-        transform.position = targetPos;
+        transform.position = playerPos.position + offset;
     }
 }

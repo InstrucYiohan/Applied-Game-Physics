@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
 
 public class PlayerManagerScript : MonoBehaviour
 {
 
     [Header("Jump")]
-    Rigidbody catRB;
     [SerializeField] bool isGrounded = true;
     [SerializeField] private float jumpForce = 2.0f;
     [SerializeField] private float holdFallMultiplier;
@@ -39,7 +37,6 @@ public class PlayerManagerScript : MonoBehaviour
 
     void Start() 
     {
-        catRB = GetComponent<Rigidbody>();
         catAnim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         currHunger = playerHunger;
@@ -99,7 +96,6 @@ public class PlayerManagerScript : MonoBehaviour
         {
             isGrounded = false;
             catAnim.SetBool("IsJumping", true);
-            //catRB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
         }
     }
@@ -129,11 +125,9 @@ public class PlayerManagerScript : MonoBehaviour
             timeRemaining = 2.0f;
         }
         
-
-        Debug.Log("Time: " + timeRemaining + "Health: " + currHunger);
     }
 
-    public void gameOver()
+    public void stopMoving()
     {
         forwardSpeed = 0f;
         catAnim.SetBool("AtFinishLine", true);
@@ -142,9 +136,8 @@ public class PlayerManagerScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision other) 
     {
-        if(other.gameObject.tag.Equals("Ground"))
+        if(other.gameObject.tag.Equals("Ground") || other.gameObject.tag.Equals("SafeObstacle"))
         {
-            Debug.Log("Ground");
             isGrounded = true;
             catAnim.SetBool("IsJumping", false);
         }
@@ -166,12 +159,6 @@ public class PlayerManagerScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) 
     {
-        //Finish Line Trigger
-        if(other.tag == "FinishLine")
-        {
-            //newPos = new Vector3(0,0,0);
-            //catSpeed = 0.0f;
-        }
 
         //Hunger Trigger
         if((other.gameObject.tag == "Food") && currHunger < playerHunger)
@@ -186,9 +173,4 @@ public class PlayerManagerScript : MonoBehaviour
 
     }
 
-
-    public void stopAnimation()
-    {
-        catAnim.SetBool("AtFinishLine", true);
-    }
 }

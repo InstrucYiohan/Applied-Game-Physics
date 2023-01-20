@@ -9,50 +9,49 @@ namespace PathCreation.Examples
 {
     public class GameOver : MonoBehaviour
     {
-        [SerializeField] PlayerManagerScript playerManager;
+        [SerializeField] private PlayerManagerScript playerManager;
         [SerializeField] TMP_Text endingText;
+        [SerializeField] private float gameOverDelay = 2f;
 
         private void Update() 
         {
             if(playerManager.currHunger == 0)
             {
-                playerManager.gameOver();
+                playerManager.stopMoving(); 
                 endingText.SetText("Game Over!");
-                Invoke("gameOver", 5.0f);
+                Invoke("reloadScene", gameOverDelay);
             }
         }
 
-        private void OnCollisionEnter(Collision other) 
+        IEnumerator OnCollisionEnter(Collision other) 
         {
-            if(other.gameObject.tag.Equals("Obstacle"))
+            if(other.gameObject.tag.Equals("Obstacle") || other.gameObject.tag.Equals("DeathCollider"))
             {
-                playerManager.gameOver();
+                playerManager.stopMoving();
                 endingText.SetText("Game Over!");
-                Invoke("gameOver", 1.0f);
+
+                yield return new WaitForSeconds(gameOverDelay);
+                reloadScene();
             }
-            if(other.gameObject.tag.Equals("DeathCollider"))
-            {
-                playerManager.gameOver();
-                endingText.SetText("Game Over!");
-                Invoke("gameOver", 1.0f);
-            }
+            yield return null;
         }
 
-        private void OnTriggerEnter(Collider other) 
+
+
+        void OnTriggerEnter(Collider other) 
         {
             if(other.tag == "FinishLine")
             {
-                playerManager.gameOver();
+                playerManager.stopMoving();
                 endingText.SetText("You Won!");
-                Invoke("gameOver", 1.0f);
             }
         }
 
-        public void gameOver()
+        void reloadScene()
         {
-            playerManager.stopAnimation();
             SceneManager.LoadScene("prototype_finals");
         }
 
+    
     }
 }

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class DestroyObject : MonoBehaviour
 {
-  
+
+    private string[] obstacleTags = { "StopSticks", "destroy", "SafeObstacle", "Obstacle" };
     private Rigidbody rb;
 
     private void Start() 
@@ -12,21 +13,24 @@ public class DestroyObject : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    void FixedUpdate()
+
+    void OnCollisionEnter(Collision other) 
     {
-        if(MenuManager.MenuManagerInstance.GameState)
+        foreach (string s in obstacleTags)
         {
-            //desMovement();
+            if (other.gameObject.CompareTag(s))
+            {
+                Destroy(other.gameObject);
+            }
         }
     }
-    void desMovement()
-    {
-        
-    }
 
-    private void OnCollisionEnter(Collision other) 
+     void OnTriggerEnter(Collider other)
     {
-        Destroy(other.gameObject);
+        if(other.gameObject.tag == "Food")
+        {
+            Destroy(other.gameObject);
+        }
     }
 
 }
