@@ -6,9 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Menu.unity
-    guid: 2aa7a88757739b745a6dda4889f59895
+    path: Assets/Ball Maze Prototype/Assets/UIstuff/StartScreen.unity
+    guid: d5d2224892c01b34fbb3febd782a7320
   - enabled: 1
-    path: Assets/Scenes/Test Scene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/Ball Maze Prototype/Assets/Scenes/GameScene.unity
+    guid: 5817bf8065401284a8b68a1789ddd077
   m_configObjects: {}
