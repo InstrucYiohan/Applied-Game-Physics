@@ -12,6 +12,9 @@ public class RollingBallBehaviour : MonoBehaviour
     [SerializeField] private int score = 0;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private int numberofCollectible;
+    [SerializeField] private TextMeshProUGUI anotherScoreText;
+    [SerializeField] private GameObject congraluationsGroup;
+
     private bool canJump = false;
     // Start is called before the first frame update
     void Start()
@@ -40,7 +43,8 @@ public class RollingBallBehaviour : MonoBehaviour
         if (score == numberofCollectible)
         {
             print("Game Over!");
-            SceneManager.LoadScene(0);
+            congraluationsGroup.SetActive(true);
+            anotherScoreText.text = "You have collected " + score + " coins!";
         }
 
         print("Horizontal axis value: " + Input.GetAxis("Horizontal"));
@@ -74,4 +78,14 @@ public class RollingBallBehaviour : MonoBehaviour
 			canJump = false;
 		}
 	}
+
+    public void RetryButton()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void BackButton()
+    {
+        SceneManager.LoadScene(0);
+    }
 }
